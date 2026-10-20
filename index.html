@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc Mừng 20/10 💕</title>
+    <!-- Nhúng font chữ viết tay tiếng Việt từ Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #fffafb;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Quicksand', sans-serif;
+            overflow: hidden;
+        }
+
+        /* Khung cảnh chính chứa lá thư và cây trái tim */
+        .scene {
+            position: relative;
+            width: 1050px;
+            height: 620px;
+            display: flex;
+            align-items: center;
+        }
+
+        /* Canvas vẽ cây trái tim và mặt đất */
+        #treeCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Khung lá thư (#letter trong ảnh) */
+        #letter {
+            position: relative;
+            z-index: 2;
+            width: 420px;
+            height: 510px;
+            margin-left: 55px;
+            margin-bottom: 35px;
+            background: #fff0f5;
+            border: 2.5px solid #f4a6c1;
+            border-radius: 18px;
+            box-shadow: 0 10px 25px rgba(244, 143, 177, 0.28), 
+                        inset 0 0 0 4px #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            /* Ẩn ban đầu, chờ cây nở xong mới hiện */
+            opacity: 0;
+            transform: translateY(25px) scale(0.96);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        #letter.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Thanh tiêu đề trên cùng của bức thư */
+        .letter-header {
+            background: linear-gradient(180deg, #ffd1dc 0%, #ffc1d3 100%);
+            padding: 12px 16px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 700;
+            color: #c2185b;
+            border-bottom: 2px dashed #f4a6c1;
+            position: relative;
+        }
+
+        /* Tem LOVE góc phải trên */
+        .stamp {
+            position: absolute;
+            right: 12px;
+            top: 8px;
+            background: #fff;
+            border: 1.5px dotted #e91e63;
+            color: #e91e63;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 3px 6px;
+            border-radius: 4px;
+            transform: rotate(8deg);
+            box-shadow: 1px 2px 4px rgba(0,0,0,0.08);
+        }
+
+        /* Vùng chứa nội dung chữ (#code trong ảnh) */
+        #code {
+            flex: 1;
+            padding: 16px 22px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 20.5px;
+            line-height: 1.55;
+            color: #4a1525;
+            overflow-y: auto;
+            /* Kẻ dòng mờ giống giấy viết thư */
+            background-image: repeating-linear-gradient(
+                transparent,
+                transparent 30px,
+                rgba(244, 166, 193, 0.25) 31px
+            );
+            scrollbar-width: thin;
+            scrollbar-color: #f8bbd0 transparent;
+        }
+
+        #code::-webkit-scrollbar {
+            width: 5px;
+        }
+        #code::-webkit-scrollbar-thumb {
+            background-color: #f48fb1;
+            border-radius: 10px;
+        }
+
+        .letter-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ad1457;
+            margin-bottom: 8px;
+        }
+
+        .letter-sign {
+            margin-top: 12px;
+            font-weight: 700;
+            color: #c2185b;
+        }
+
+        /* Phần chân thư chứa nút bấm & thỏ trắng (#letter-actions trong ảnh) */
+        #letter-actions {
+            height: 60px;
+            background: #ffe4ee;
+            border-top: 1.5px solid #f8bbd0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.6s ease;
+        }
+
+        #letter-actions.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .btn-pink {
+            background: linear-gradient(180deg, #ff80ab 0%, #f50057 100%);
+            color: white;
+            border: 2px solid #fff;
+            padding: 7px 28px;
+            border-radius: 25px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(245, 0, 87, 0.35);
+            transition: transform 0.2s;
+        }
+
+        .btn-pink:hover {
+            transform: scale(1.07);
+        }
+
+        .bunny-sticker {
+            position: absolute;
+            right: 16px;
+            bottom: 6px;
+            font-size: 32px;
+            filter: drop-shadow(0 2px 3px rgba(0,0,0,0.12));
+            animation: bounce 2s infinite ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="scene">
+        <!-- Bức thư bên trái -->
+        <div id="letter">
+            <div class="letter-header">
+                💕 Thư Gửi Em Yêu 💕
+                <span class="stamp">LOVE ❤️</span>
+            </div>
+
+            <div id="code"></div>
+
+            <div id="letter-actions">
+                <button class="btn-pink" onclick="alert('Yêu công chúa của anh nhiều lắmmm! ❤️🌷')">Xem</button>
+                <div class="bunny-sticker">🐰</div>
+            </div>
+        </div>
+
+        <!-- Canvas vẽ cây trái tim bên phải -->
+        <canvas id="treeCanvas" width="1050" height="620"></canvas>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('treeCanvas');
+        const ctx = canvas.getContext('2d');
+        const width = canvas.width;
+        const height = canvas.height;
+
+        // Tọa độ gốc cây và mặt đất
+        const treeX = 730;
+        const groundY = 575;
+
+        // Bảng màu trái tim giống hệt trong ảnh (hồng, đỏ, cam, vàng, tím hồng)
+        const heartColors = [
+            '#ff0a54', '#ff477e', '#ff5c8a', '#ff7096', '#ff85a1',
+            '#ff99ac', '#fbb1bd', '#ffbe0b', '#fb5607', '#ff006e',
+            '#e63946', '#f72585', '#ffb703', '#ff4d6d', '#c77dff'
+        ];
+
+        // 1. Tạo danh sách hàng trăm trái tim nằm trong hình trái tim lớn
+        const leaves = [];
+        const totalLeaves = 780;
+
+        function isInsideHeart(x, y) {
+            // Phương trình toán học của hình trái tim: (x^2 + y^2 - 1)^3 - x^2 * y^3 <= 0
+            const eq = Math.pow(x * x + y * y - 1, 3) - (x * x) * Math.pow(y, 3);
+            return eq <= 0;
+        }
+
+        while (leaves.length < totalLeaves) {
+            // Random tọa độ chuẩn hóa trong khoảng [-1.3, 1.3]
+            const nx = (Math.random() * 2.6) - 1.3;
+            const ny = (Math.random() * 2.6) - 1.3;
+
+            if (isInsideHeart(nx, ny)) {
+                leaves.push({
+                    x: treeX + nx * 165,
+                    y: (groundY - 295) - ny * 155, // Đảo trục Y vì Canvas hướng xuống
+                    size: 9 + Math.random() * 11,
+                    maxSize: 9 + Math.random() * 11,
+                    curSize: 0,
+                    color: heartColors[Math.floor(Math.random() * heartColors.length)],
+                    angle: (Math.random() - 0.5) * 0.7,
+                    swaySpeed: 0.02 + Math.random() * 0.03,
+                    swayOffset: Math.random() * Math.PI * 2,
+                    bloomDelay: Math.random() * 90 // Thời điểm nở
+                });
+            }
+        }
+
+        // Danh sách cánh hoa tim rơi trong gió
+        const fallingHearts = [];
+        for (let i = 0; i < 18; i++) {
+            fallingHearts.push(createFallingHeart());
+        }
+
+        function createFallingHeart() {
+            return {
+                x: treeX + (Math.random() * 320 - 160),
+                y: (groundY - 300) + (Math.random() * 200 - 100),
+                size: 7 + Math.random() * 6,
+                color: heartColors[Math.floor(Math.random() * heartColors.length)],
+                vx: -0.6 - Math.random() * 0.8,
+                vy: 0.8 + Math.random() * 1.1,
+                angle: Math.random() * Math.PI,
+                spin: (Math.random() - 0.5) * 0.04
+            };
+        }
+
+        // Hàm vẽ 1 trái tim tại tọa độ (x, y)
+        function drawHeart(x, y, size, color, angle) {
+            if (size <= 0.2) return;
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            const s = size / 15;
+            ctx.moveTo(0, -4 * s);
+            ctx.bezierCurveTo(-8 * s, -12 * s, -16 * s, -2 * s, 0, 11 * s);
+            ctx.bezierCurveTo(16 * s, -2 * s, 8 * s, -12 * s, 0, -4 * s);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Hàm vẽ đường mặt đất (foot.draw() trong ảnh)
+        function drawFoot(progress) {
+            ctx.save();
+            ctx.strokeStyle = '#2b1d23';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            const lineLength = 980 * Math.min(progress, 1);
+            ctx.moveTo(35, groundY);
+            ctx.lineTo(35 + lineLength, groundY);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Hàm vẽ thân cây và cành cây
+        function drawTrunk(growProgress, swayAngle) {
+            ctx.save();
+            ctx.translate(treeX, groundY);
+            ctx.rotate(swayAngle * 0.15);
+
+            ctx.fillStyle = '#23191e';
+            ctx.strokeStyle = '#23191e';
+            ctx.lineCap = 'round';
+
+            const h = 190 * Math.min(growProgress, 1);
+
+            // Thân chính thon dần lên trên
+            ctx.beginPath();
+            ctx.moveTo(-16, 0);
+            ctx.quadraticCurveTo(-8, -h * 0.5, -4, -h);
+            ctx.lineTo(4, -h);
+            ctx.quadraticCurveTo(8, -h * 0.5, 16, 0);
+            ctx.closePath();
+            ctx.fill();
+
+            // Vẽ các nhánh phụ khi thân đã mọc cao
+            if (growProgress > 0.5) {
+                const branchFactor = (growProgress - 0.5) * 2;
+                ctx.lineWidth = 7 * branchFactor;
+
+                // Nhánh trái
+                ctx.beginPath();
+                ctx.moveTo(-2, -h * 0.65);
+                ctx.quadraticCurveTo(-45 * branchFactor, -h * 0.85, -85 * branchFactor, -h * 1.15);
+                ctx.stroke();
+
+                // Nhánh phải
+                ctx.beginPath();
+                ctx.moveTo(2, -h * 0.6);
+                ctx.quadraticCurveTo(45 * branchFactor, -h * 0.85, 85 * branchFactor, -h * 1.15);
+                ctx.stroke();
+
+                // Nhánh giữa vươn lên
+                ctx.lineWidth = 5 * branchFactor;
+                ctx.beginPath();
+                ctx.moveTo(0, -h * 0.85);
+                ctx.quadraticCurveTo(15 * branchFactor, -h * 1.15, 0, -h * 1.38);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        // 2. Nội dung bức thư và hiệu ứng gõ chữ (textAnimate trong ảnh)
+        const letterHTML = `
+            <div class="letter-title">Gửi em...</div>
+            <div>Chúc công chúa của anh một ngày 20/10 thật vui vẻ và hạnh phúc nhóoo ❤️🌷 Anh mong em lúc nào cũng giữ được nụ cười xinh xắn trên môi, luôn vui vẻ, bình an và gặp thật nhiều điều tốt đẹp trong cuộc sống. Cảm ơn em vì đã xuất hiện và trở thành một phần đặc biệt trong thế giới của anh. Anh không biết sau này sẽ có bao nhiêu điều thay đổi, nhưng anh mong mình vẫn có thể ở bên cạnh em, cùng em chia sẻ những niềm vui, an ủi em những lúc buồn và yêu thương em bằng tất cả sự chân thành của mình. Anh không hứa sẽ khiến mọi ngày của em đều hoàn hảo, nhưng anh sẽ cố gắng để em luôn cảm nhận được rằng mình được yêu thương và trân trọng. Chúc cô gái của anh ngày 20/10 ngập tràn hoa, quà, niềm vui và đặc biệt là thật nhiều tình yêu từ anh nhaaa.</div>
+            <div class="letter-sign">Yêu em nhiều lắmmmm, bé yêu của anh 💕💐✨</div>
+        `;
+
+        function startTextAnimate() {
+            const letterEl = document.getElementById('letter');
+            const codeEl = document.getElementById('code');
+            const actionsEl = document.getElementById('letter-actions');
+
+            // Hiện khung thư (#letter.addClass("show"))
+            letterEl.classList.add('show');
+
+            // Đợi 1.2 giây rồi bắt đầu gõ chữ (typewriter)
+            setTimeout(() => {
+                let i = 0;
+                const speed = 28; // Tốc độ gõ (ms)
+
+                function typeWriter() {
+                    if (i < letterHTML.length) {
+                        // Nếu gặp thẻ HTML (<div...>) thì lấy nguyên thẻ để không bị in chữ '<'
+                        if (letterHTML.charAt(i) === '<') {
+                            const closeIdx = letterHTML.indexOf('>', i);
+                            i = closeIdx + 1;
+                        } else {
+                            i++;
+                        }
+                        codeEl.innerHTML = letterHTML.slice(0, i);
+                        // Tự động cuộn xuống cuối khung chữ giống dòng 18 trong ảnh
+                        codeEl.scrollTop = codeEl.scrollHeight;
+                        setTimeout(typeWriter, speed);
+                    } else {
+                        // Gõ xong thì hiện nút bấm và thỏ trắng (#letter-actions.addClass("show"))
+                        actionsEl.classList.add('show');
+                        codeEl.scrollTop = codeEl.scrollHeight;
+                    }
+                }
+                typeWriter();
+            }, 1200);
+        }
+
+        // 3. Vòng lặp Animation chính (jumpAnimate trong ảnh)
+        let frame = 0;
+        let letterStarted = false;
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            frame++;
+
+            // Giai đoạn 1: Vẽ mặt đất và mọc thân cây (60 frame đầu ~ 1 giây)
+            const growProgress = Math.min(frame / 55, 1);
+            const sway = Math.sin(frame * 0.03) * 0.04;
+
+            drawFoot(growProgress);
+            drawTrunk(growProgress, sway);
+
+            // Giai đoạn 2: Nở tán lá trái tim và đung đưa (tree.jump())
+            if (frame > 35) {
+                const bloomTick = frame - 35;
+                leaves.forEach(leaf => {
+                    if (bloomTick > leaf.bloomDelay) {
+                        if (leaf.curSize < leaf.maxSize) {
+                            leaf.curSize += 0.65;
+                        }
+                        const dx = Math.sin(frame * leaf.swaySpeed + leaf.swayOffset) * 2.2;
+                        const dy = Math.cos(frame * leaf.swaySpeed + leaf.swayOffset) * 1.5;
+                        drawHeart(leaf.x + dx, leaf.y + dy, leaf.curSize, leaf.color, leaf.angle);
+                    }
+                });
+            }
+
+            // Giai đoạn 3: Khi cây bắt đầu nở rộ thì mở bức thư và thả tim bay
+            if (frame > 110) {
+                if (!letterStarted) {
+                    letterStarted = true;
+                    startTextAnimate();
+                }
+
+                fallingHearts.forEach(fh => {
+                    fh.x += fh.vx + Math.sin(frame * 0.04) * 0.3;
+                    fh.y += fh.vy;
+                    fh.angle += fh.spin;
+
+                    drawHeart(fh.x, fh.y, fh.size, fh.color, fh.angle);
+
+                    // Nếu rơi chạm đất thì tạo lại từ tán cây
+                    if (fh.y > groundY - 5) {
+                        Object.assign(fh, createFallingHeart());
+                    }
+                });
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>
